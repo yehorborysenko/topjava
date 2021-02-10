@@ -22,17 +22,19 @@ public class MealDaoImpl implements MealDao {
     }
 
     @Override
-    public void create(Meal meal) {
+    public Meal create(Meal meal) {
         log.debug("create {}", meal);
         int id = lastId.incrementAndGet();
         meals.put(id, new Meal(id, meal.getDateTime(), meal.getDescription(),
                 meal.getCalories()));
+        return meal;
     }
 
     @Override
-    public void update(Meal meal) {
+    public Meal update(Meal meal) {
         log.debug("meal {}", meal);
-        meals.put(meal.getId(), meal);
+        meals.computeIfPresent(meal.getId(), (k, v) -> meal);
+        return meal;
     }
 
     @Override

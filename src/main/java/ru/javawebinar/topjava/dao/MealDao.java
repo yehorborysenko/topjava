@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface MealDao {
 
-    void create(Meal meal);
+    Meal create(Meal meal);
 
-    void update(Meal meal);
+    Meal update(Meal meal);
 
     void delete(int id);
 

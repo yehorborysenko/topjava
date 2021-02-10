@@ -20,11 +20,15 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(MealServlet.class);
-    private final MealDao mealDao = new MealDaoImpl();
+    private MealDao mealDao;
     private static final int CALORIES_LIMIT = 2000;
     private static final String CREATE_OR_UPDATE = "createOrUpdateMeal.jsp";
     private static final String LIST = "meals.jsp";
     private static final String SERVLET_URL = "meals";
+
+    public void init() {
+        mealDao = new MealDaoImpl();
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -34,12 +38,12 @@ public class MealServlet extends HttpServlet {
             case "createOrUpdate" :
                 if (request.getParameter("id") == null) {
                     log.debug("forward to create meal");
-                    request.setAttribute("action", "Create meal");
+                    request.setAttribute("action", true);
                 }
                 else {
                     int id = Integer.parseInt(request.getParameter("id"));
                     request.setAttribute("meal", mealDao.get(id));
-                    request.setAttribute("action", "Update meal");
+                    request.setAttribute("action", false);
                     log.debug("forward to update meal");
                 }
                 request.getRequestDispatcher(CREATE_OR_UPDATE).forward(request, response);
